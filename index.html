@@ -6,10 +6,33 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+<style>
+    article{
+        width:60%;
+        margin: 0 auto;
+        height: 45vh;
+        overflow-y: scroll;
+        padding: 20px;
+        box-sizing: border-box;
+        border: 1px solid lightgrey;
+    }
+    #input{
+        margin-bottom: 5vh;
+    }
+    h1{
+        text-align: center;
+    }
+</style>
 <body>
+    <article id="input">
+        <h1>Input:</h1>
+    </article>
+    <article id="output">
+        <h1>Output:</h1>
+    </article>
     <script>
         let roles={};
-        const characters =['Городничий','Аммос Федорович','Почтмейстер'];
+        const characters =['Почтмейстер','Городничий','Аммос Федорович'];
         let input="Почтмейстер: Объясните, господа, что, какой чиновник едет?\
 Городничий: А вы разве не слышали?\
 Почтмейстер: Слышал от Петра Ивановича Бобчинского. Он только что был у меня в почтовой конторе.\
@@ -37,14 +60,25 @@
         const regex2=new RegExp("("+characters.join("|")+")(\\s\\(([а-я]+,?\\s?)+\\))?:\\s(\\(?[^\\r\\n][А-Яа-я]*[\\.;:,!?\\-]*\\)?(\\.{0,3})\\s?)+$","gm");
         input=input.replace('\n',"").replace(regex1,(x)=>" \n"+x);
         let play=input.match(regex2);
-        play=play.map((element,index) => {
-            element=(index+1)+")"+element;
-            return element;
+        play.forEach(string=>{
+            let p=document.createElement("p");
+            p.innerHTML=string;
+            document.getElementById("input").appendChild(p);
         });
+        play=play.map((element,index) => element=(index+1)+")"+element);
         for(let i=0;i<characters.length;i++){
             roles[characters[i]]=play.filter(string=>string.match(new RegExp(characters[i]+"(\\s\\(([а-я]+,?\\s?)+\\))?:\\s(\\(?[^\\r\\n][А-Яа-я]*[\\.;:,!?\\-]*\\)?(\\.{0,3})\\s?)+$","gm")));
         }
-        console.log(roles);
+        for(let key in roles){
+            let h=document.createElement("h2");
+            h.innerHTML=key;
+            document.getElementById("output").appendChild(h);
+            roles[key].forEach(string=>{
+                let p=document.createElement("p");
+                p.innerHTML=string;
+                document.getElementById("output").appendChild(p);
+        });
+        }
     </script>
 </body>
 </html>
